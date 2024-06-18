@@ -105,18 +105,11 @@ public class SistemaControlAcceso {
             Thread.currentThread().interrupt();
         }
 
-        // Calcular y mostrar métricas
         calcularYMostrarMetricas(tiemposDeProcesamiento, tiemposDeEspera, resultados);
 
         System.out.println("Sistema finalizado.");
     }
 
-    /**
-     * Lee imágenes desde un archivo CSV.
-     * 
-     * @param filePath La ruta del archivo CSV.
-     * @return Una lista de objetos Imagen leídos desde el archivo.
-     */
     public static List<Imagen> leerImagenesDeArchivo(String filePath) {
         List<Imagen> imagenes = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
@@ -211,7 +204,6 @@ public class SistemaControlAcceso {
     
             latch.await();
     
-            // Calcula el promedio de tiempo de procesamiento
             double sumaTiempos = 0;
             for (Long tiempo : tiemposDeProcesamiento) {
                 sumaTiempos += tiempo;
@@ -219,7 +211,6 @@ public class SistemaControlAcceso {
             double promedioTiempoProcesamiento = sumaTiempos / tiemposDeProcesamiento.size();
             resultados.add(String.format("Promedio de tiempo de procesamiento: %.2f ms", promedioTiempoProcesamiento));
     
-            // Calcula el promedio de tiempo de espera en la cola
             double sumaEspera = 0;
             for (Long tiempo : tiemposDeEspera) {
                 sumaEspera += tiempo;
@@ -233,13 +224,6 @@ public class SistemaControlAcceso {
         return resultados;
     }
 
-    /**
-     * Calcula y muestra las métricas obtenidas de las pruebas.
-     * 
-     * @param tiemposDeProcesamiento Lista de tiempos de procesamiento.
-     * @param tiemposDeEspera Lista de tiempos de espera.
-     * @param resultados Lista de resultados de acceso.
-     */
     public static void calcularYMostrarMetricas(List<Long> tiemposDeProcesamiento, List<Long> tiemposDeEspera, List<String> resultados) {
         double tiempoPromedioProcesamiento = tiemposDeProcesamiento.stream().mapToLong(Long::longValue).average().orElse(0.0);
         double tiempoPromedioEspera = tiemposDeEspera.stream().mapToLong(Long::longValue).average().orElse(0.0);

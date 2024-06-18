@@ -33,8 +33,8 @@ public class ReconocimientoFacial extends Thread {
                         long tiempoEnCola = tiempoInicioProcesamiento - imagen.getTimestamp();
                         tiemposDeEspera.add(tiempoEnCola);
                         System.out.println("[" + Thread.currentThread().getName() + "] Procesando imagen: " + imagen.getNombre() + " (VIP: " + imagen.isEsVIP() + ")");
-                        // Simula tiempo de procesamiento entre 100 y 300 ms
-                        int tiempoProcesamiento = 100 + (int) (Math.random() * 200);
+                        // Simula tiempo de procesamiento entre 50 y 150 ms
+                        int tiempoProcesamiento = 50 + (int) (Math.random() * 100); // Reducir tiempo de simulación
                         Thread.sleep(tiempoProcesamiento);
                         long tiempoFinProcesamiento = System.currentTimeMillis();
                         tiemposDeProcesamiento.add(tiempoFinProcesamiento - tiempoInicioProcesamiento);

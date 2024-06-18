@@ -23,7 +23,7 @@ public class SistemaControlAcceso {
         // if (useRandomData) {
         //     iniciarSistemaNormal();
         // } else {
-        //     iniciarSistemaConDatosDeArchivo("C:\\Users\\ignrd\\OneDrive\\Escritorio\\obligatorio\\src\\main\\java\\com\\example\\imagenes.csv");
+        //     iniciarSistemaConDatosDeArchivo("C:\\Users\\ignrd\\OneDrive\\Escritorio\\obligatorio-ssoo\\src\\main\\java\\com\\example\\Archivos\\imagenes.csv");
         // }
         
         // Casos de prueba
@@ -62,11 +62,6 @@ public class SistemaControlAcceso {
     }
 
     /**
-     * Inicia el sistema leyendo imágenes desde un archivo CSV.
-     * 
-     * @param filePath La ruta del archivo CSV.
-     */
-     /**
      * Inicia el sistema leyendo imágenes desde un archivo CSV.
      * 
      * @param filePath La ruta del archivo CSV.
@@ -248,7 +243,7 @@ public class SistemaControlAcceso {
     public static void calcularYMostrarMetricas(List<Long> tiemposDeProcesamiento, List<Long> tiemposDeEspera, List<String> resultados) {
         double tiempoPromedioProcesamiento = tiemposDeProcesamiento.stream().mapToLong(Long::longValue).average().orElse(0.0);
         double tiempoPromedioEspera = tiemposDeEspera.stream().mapToLong(Long::longValue).average().orElse(0.0);
-        long totalProcesadasPorMinuto = tiemposDeProcesamiento.size() * 60000 / (tiemposDeProcesamiento.stream().mapToLong(Long::longValue).sum());
+        long totalProcesadasPorMinuto = (long) (60000.0 / tiempoPromedioProcesamiento);
 
         System.out.println("Métricas:");
         System.out.printf("Tiempo de procesamiento promedio por imagen: %.2f ms%n", tiempoPromedioProcesamiento);

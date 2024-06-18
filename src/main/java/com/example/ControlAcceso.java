@@ -51,7 +51,7 @@ public class ControlAcceso extends Thread {
                         SistemaControlAcceso.colaImagenesSemaphore.release();
                     }
                 }
-                Thread.sleep(100);
+                Thread.sleep(50);
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();

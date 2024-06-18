@@ -5,6 +5,11 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+/**
+ * Clase que simula el control de acceso.
+ * 
+ * Extiende Thread y decide si las imágenes procesadas tienen acceso permitido o denegado.
+ */
 public class ControlAcceso extends Thread {
     private final BlockingQueue<Imagen> colaImagenes;
     private final int cantidadImagenes;
@@ -30,8 +35,10 @@ public class ControlAcceso extends Thread {
 
                 if (imagen.isProcesada() && !imagenesProcesadas.contains(imagen)) {
                     if (imagen.isAccesoPermitido()) {
+                        resultados.add("Acceso permitido para: " + imagen.getNombre() + " (VIP: " + imagen.isEsVIP() + ")");
                         System.out.println("[" + Thread.currentThread().getName() + "] Acceso permitido para: " + imagen.getNombre() + " (VIP: " + imagen.isEsVIP() + ")");
                     } else {
+                        resultados.add("Acceso denegado para: " + imagen.getNombre() + " (VIP: " + imagen.isEsVIP() + ")");
                         System.out.println("[" + Thread.currentThread().getName() + "] Acceso denegado para: " + imagen.getNombre() + " (VIP: " + imagen.isEsVIP() + ")");
                     }
                     imagenesProcesadas.add(imagen);
@@ -48,6 +55,7 @@ public class ControlAcceso extends Thread {
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
+            System.err.println("ControlAcceso interrumpido.");
         } finally {
             latch.countDown();
         }

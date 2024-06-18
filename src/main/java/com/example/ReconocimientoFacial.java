@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
 
+
 public class ReconocimientoFacial extends Thread {
     private final BlockingQueue<Imagen> colaImagenes;
     private final int cantidadImagenes;
@@ -32,7 +33,9 @@ public class ReconocimientoFacial extends Thread {
                         long tiempoEnCola = tiempoInicioProcesamiento - imagen.getTimestamp();
                         tiemposDeEspera.add(tiempoEnCola);
                         System.out.println("[" + Thread.currentThread().getName() + "] Procesando imagen: " + imagen.getNombre() + " (VIP: " + imagen.isEsVIP() + ")");
-                        Thread.sleep((int) (Math.random() * 100));
+                        // Simula tiempo de procesamiento más realista
+                        int tiempoProcesamiento = 300 + (int) (Math.random() * 200); // entre 300 y 500 ms
+                        Thread.sleep(tiempoProcesamiento);
                         long tiempoFinProcesamiento = System.currentTimeMillis();
                         tiemposDeProcesamiento.add(tiempoFinProcesamiento - tiempoInicioProcesamiento);
                         boolean accesoPermitido = Math.random() > 0.2;
@@ -59,6 +62,7 @@ public class ReconocimientoFacial extends Thread {
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
+            System.err.println("ReconocimientoFacial interrumpido.");
         } finally {
             latch.countDown();
         }

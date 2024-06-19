@@ -151,37 +151,44 @@ public class SistemaControlAcceso {
 
     public static void ejecutarCasosDePrueba() {
         System.out.println("Iniciando casos de prueba...");
+//
+//        System.out.println("Escenario de Prueba: Inicio de Clases");
+//        // Configura y ejecuta el escenario de prueba
+//        iniciarSistemaConDatosDeArchivo("/Users/gastonbauer/Desktop/facultad/ssoo/obligatorio/src/main/java/com/example/Archivos/inicio_de_clases.csv");
+//        System.out.println("Prueba de Inicio de Clases finalizada.");
+//        System.out.println("---------------------------------------------");
+//
+//        System.out.println("Escenario de Prueba: Evento VIP");
+//        // Configura y ejecuta el escenario de prueba
+//        iniciarSistemaConDatosDeArchivo("/Users/gastonbauer/Desktop/facultad/ssoo/obligatorio/src/main/java/com/example/Archivos/evento_vip.csv");
+//        System.out.println("Prueba de Evento VIP finalizada.");
+//        System.out.println("---------------------------------------------");
+//
+//        System.out.println("Escenario de Prueba: Cambio de Iluminación");
+//        // Configura y ejecuta el escenario de prueba
+//        iniciarSistemaConDatosDeArchivo("/Users/gastonbauer/Desktop/facultad/ssoo/obligatorio/src/main/java/com/example/Archivos/cambio_de_iluminacion.csv");
+//        System.out.println("Prueba de Cambio de Iluminación finalizada.");
+//        System.out.println("---------------------------------------------");
+//
+//        // Caso de Prueba 4: Actualización de Base de Datos
+//        System.out.println("Escenario de Prueba: Actualización de Base de Datos");
+//        // Configura y ejecuta el escenario de prueba
+//        iniciarSistemaConDatosDeArchivo("/Users/gastonbauer/Desktop/facultad/ssoo/obligatorio/src/main/java/com/example/Archivos/actualizacion_base_de_datos.csv");
+//        System.out.println("Prueba de Actualización de Base de Datos finalizada.");
+//        System.out.println("---------------------------------------------");
+//
+//        // Caso de Prueba 5: Carga Máxima
+//        System.out.println("Escenario de Prueba: Carga Máxima");
+//        // Configura y ejecuta el escenario de prueba
+//        iniciarSistemaConDatosDeArchivo("/Users/gastonbauer/Desktop/facultad/ssoo/obligatorio/src/main/java/com/example/Archivos/carga_maxima.csv");
+//        System.out.println("Prueba de Carga Máxima finalizada.");
+//        System.out.println("---------------------------------------------");
 
-        System.out.println("Escenario de Prueba: Inicio de Clases");
+        // Caso de Prueba 6: Reintentos de gente rechazada
+        System.out.println("Escenario de Prueba: Reintentos de gente rechazada");
         // Configura y ejecuta el escenario de prueba
-        iniciarSistemaConDatosDeArchivo("C:\\Users\\ignrd\\OneDrive\\Escritorio\\obligatorio-ssoo\\src\\main\\java\\com\\example\\Archivos\\inicio_de_clases.csv");
-        System.out.println("Prueba de Inicio de Clases finalizada.");
-        System.out.println("---------------------------------------------");
-
-        System.out.println("Escenario de Prueba: Evento VIP");
-        // Configura y ejecuta el escenario de prueba
-        iniciarSistemaConDatosDeArchivo("C:\\Users\\ignrd\\OneDrive\\Escritorio\\obligatorio-ssoo\\src\\main\\java\\com\\example\\Archivos\\evento_vip.csv");
-        System.out.println("Prueba de Evento VIP finalizada.");
-        System.out.println("---------------------------------------------");
-
-        System.out.println("Escenario de Prueba: Cambio de Iluminación");
-        // Configura y ejecuta el escenario de prueba
-        iniciarSistemaConDatosDeArchivo("C:\\Users\\ignrd\\OneDrive\\Escritorio\\obligatorio-ssoo\\src\\main\\java\\com\\example\\Archivos\\cambio_de_iluminacion.csv");
-        System.out.println("Prueba de Cambio de Iluminación finalizada.");
-        System.out.println("---------------------------------------------");
-
-        // Caso de Prueba 4: Actualización de Base de Datos
-        System.out.println("Escenario de Prueba: Actualización de Base de Datos");
-        // Configura y ejecuta el escenario de prueba
-        iniciarSistemaConDatosDeArchivo("C:\\Users\\ignrd\\OneDrive\\Escritorio\\obligatorio-ssoo\\src\\main\\java\\com\\example\\Archivos\\actualizacion_base_de_datos.csv");
-        System.out.println("Prueba de Actualización de Base de Datos finalizada.");
-        System.out.println("---------------------------------------------");    
-
-        // Caso de Prueba 5: Carga Máxima
-        System.out.println("Escenario de Prueba: Carga Máxima");
-        // Configura y ejecuta el escenario de prueba
-        iniciarSistemaConDatosDeArchivo("C:\\Users\\ignrd\\OneDrive\\Escritorio\\obligatorio-ssoo\\src\\main\\java\\com\\example\\Archivos\\carga_maxima.csv");
-        System.out.println("Prueba de Carga Máxima finalizada.");
+        iniciarSistemaConDatosDeArchivo("/Users/gastonbauer/Desktop/facultad/ssoo/obligatorio/src/main/java/com/example/Archivos/reintentos_gente_rechazada.csv");
+        System.out.println("Prueba de Reintentos de gente rechazada finalizada.");
         System.out.println("---------------------------------------------");
         System.out.println("Casos de prueba finalizados.");
     }

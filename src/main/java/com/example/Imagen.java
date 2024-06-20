@@ -8,20 +8,12 @@ public class Imagen implements Comparable<Imagen> {
     private long timestamp;
     private int id;
 
-    public Imagen(boolean esVIP) {
-        this.nombre = "imagen_" + System.currentTimeMillis();
-        this.esVIP = esVIP;
-        this.procesada = false;
-        this.timestamp = System.currentTimeMillis();
-        this.id = SistemaControlAcceso.idGenerator.incrementAndGet();
-    }
-
-    public Imagen(String nombre, boolean esVIP, int id) {
+    public Imagen(String nombre, boolean esVIP) {
         this.nombre = nombre;
         this.esVIP = esVIP;
         this.procesada = false;
         this.timestamp = System.currentTimeMillis();
-        this.id = id;
+        this.id = SistemaControlAcceso.idGenerator.incrementAndGet();
     }
 
     public String getNombre() {

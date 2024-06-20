@@ -4,35 +4,27 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
 
 public class CapturaImagenes extends Thread {
-    private final BlockingQueue<Imagen> colaImagenes;
-    private final int cantidadImagenes;
-    private final int intervaloCaptura;
+    private final BlockingQueue<Imagen> colaPrioridad;
+    private final BlockingQueue<Imagen> colaProcesamiento;
     private final CountDownLatch latch;
+    private final int intervaloCaptura;
 
-    public CapturaImagenes(BlockingQueue<Imagen> colaImagenes, int cantidadImagenes, int intervaloCaptura, CountDownLatch latch) {
-        this.colaImagenes = colaImagenes;
-        this.cantidadImagenes = cantidadImagenes;
-        this.intervaloCaptura = intervaloCaptura;
+    public CapturaImagenes(BlockingQueue<Imagen> colaPrioridad, BlockingQueue<Imagen> colaProcesamiento, CountDownLatch latch, int intervaloCaptura) {
+        this.colaPrioridad = colaPrioridad;
+        this.colaProcesamiento = colaProcesamiento;
         this.latch = latch;
+        this.intervaloCaptura = intervaloCaptura;
         this.setName("CapturaImagenes");
     }
 
     @Override
     public void run() {
         try {
-            for (int i = 0; i < cantidadImagenes || cantidadImagenes == -1; i++) {
-                boolean esVIP = Math.random() < 0.1;
-                Imagen imagenCapturada = new Imagen(esVIP);
-
-                SistemaControlAcceso.colaImagenesSemaphore.acquire();
-                try {
-                    colaImagenes.put(imagenCapturada);
-                    System.out.println("[" + Thread.currentThread().getName() + "] Capturando imagen: " + imagenCapturada.getNombre() + " (VIP: " + esVIP + ")");
-                } finally {
-                    SistemaControlAcceso.colaImagenesSemaphore.release();
-                }
-
-                Thread.sleep(intervaloCaptura);
+            while (!colaPrioridad.isEmpty()) {
+                Imagen imagen = colaPrioridad.take();
+                colaProcesamiento.put(imagen);
+                System.out.println("[" + Thread.currentThread().getName() + "] Capturando imagen: " + imagen.getNombre() + " (VIP: " + imagen.isEsVIP() + ")");
+                Thread.sleep(intervaloCaptura); 
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();

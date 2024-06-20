@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
 
-
 public class ReconocimientoFacial extends Thread {
     private final BlockingQueue<Imagen> colaImagenes;
     private final int cantidadImagenes;
@@ -33,12 +32,12 @@ public class ReconocimientoFacial extends Thread {
                         long tiempoEnCola = tiempoInicioProcesamiento - imagen.getTimestamp();
                         tiemposDeEspera.add(tiempoEnCola);
                         System.out.println("[" + Thread.currentThread().getName() + "] Procesando imagen: " + imagen.getNombre() + " (VIP: " + imagen.isEsVIP() + ")");
-                        // Simula tiempo de procesamiento entre 50 y 150 ms
-                        int tiempoProcesamiento = 50 + (int) (Math.random() * 100); // Reducir tiempo de simulación
+                        // Simula tiempo de procesamiento entre 50 y 100 ms
+                        int tiempoProcesamiento = 50 + (int) (Math.random() * 50); // Reducir tiempo de simulación
                         Thread.sleep(tiempoProcesamiento);
                         long tiempoFinProcesamiento = System.currentTimeMillis();
                         tiemposDeProcesamiento.add(tiempoFinProcesamiento - tiempoInicioProcesamiento);
-                        boolean accesoPermitido = Math.random() > 0.2;
+                        boolean accesoPermitido = SistemaControlAcceso.imagenesPermitidas.contains(imagen.getNombre());
                         imagen.setProcesada(true);
                         imagen.setAccesoPermitido(accesoPermitido);
 

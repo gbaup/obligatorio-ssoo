@@ -3,10 +3,7 @@ package com.example;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.PriorityBlockingQueue;
@@ -22,8 +19,8 @@ public class SistemaControlAcceso {
     public static void main(String[] args) {
         try {
             System.out.println("Iniciando sistema...");
-            cargarImagenesPermitidas("C:\\Users\\ignrd\\OneDrive\\Escritorio\\obligatorio\\src\\main\\java\\com\\example\\Archivos\\base_de_datos.csv");
-            iniciarSistemaConDatosDeArchivo("C:\\Users\\ignrd\\OneDrive\\Escritorio\\obligatorio\\src\\main\\java\\com\\example\\Archivos\\imagenes.csv");
+            cargarImagenesPermitidas("/Users/gastonbauer/Desktop/facultad/ssoo/obligatorio/src/main/java/com/example/Archivos/base_de_datos.csv");
+            iniciarSistemaConDatosDeArchivo("/Users/gastonbauer/Desktop/facultad/ssoo/obligatorio/src/main/java/com/example/Archivos/imagenes.csv");
             System.out.println("---------------------------------------------");
 
             //ejecutarCasosDePrueba();
@@ -147,46 +144,56 @@ public class SistemaControlAcceso {
         System.out.printf("Total accesos denegados: %d%n", totalAccesosDenegados);
     }
 
-    public static List<String> ejecutarSimulacion(String filePath, int intervaloCaptura, int cantidadHilos) {
+    public static List<String> ejecutarSimulacion(String filePath, String database, int intervaloCaptura, int cantidadHilos) {
+        System.out.println("Iniciando sistema...");
+        cargarImagenesPermitidas(database);
         BlockingQueue<Imagen> colaPrioridad = new PriorityBlockingQueue<>(30, (i1, i2) -> {
             if (i1.isEsVIP() == i2.isEsVIP()) {
                 return Integer.compare(i1.getId(), i2.getId());
             }
             return i1.isEsVIP() ? -1 : 1;
         });
-    
+
         BlockingQueue<Imagen> colaProcesamiento = new PriorityBlockingQueue<>(30, (i1, i2) -> {
             if (i1.isEsVIP() == i2.isEsVIP()) {
                 return Integer.compare(i1.getId(), i2.getId());
             }
             return i1.isEsVIP() ? -1 : 1;
         });
-    
+
         List<Imagen> imagenes = leerImagenesDeArchivo(filePath);
         if (imagenes == null || imagenes.isEmpty()) {
             System.err.println("Error al leer las imágenes del archivo o archivo vacío. Finalizando el programa.");
             return null;
         }
         int cantidadImagenes = imagenes.size();
-        CountDownLatch latch = new CountDownLatch(3); // Ajustado a 3 hilos principales
+        CountDownLatch latch = new CountDownLatch(cantidadHilos * 2 + 1); // Ajustar a la cantidad de hilos (capturaImagenes y reconocimientoFacial) + 1 (controlAcceso)
         List<Long> tiemposDeProcesamiento = new ArrayList<>();
         List<Long> tiemposDeEspera = new ArrayList<>();
         List<String> resultados = new ArrayList<>();
-    
+
         System.out.println("Inicializando colas de imágenes...");
         for (Imagen imagen : imagenes) {
             colaPrioridad.add(imagen);
         }
-    
-        Thread capturaImagenes = new CapturaImagenes(colaPrioridad, colaProcesamiento, latch, intervaloCaptura); // Reducir intervalo de captura
-        Thread reconocimientoFacial = new ReconocimientoFacial(colaProcesamiento, cantidadImagenes, latch, tiemposDeProcesamiento, tiemposDeEspera);
+
+        List<Thread> hilosCaptura = new ArrayList<>();
+        for (int i = 0; i < cantidadHilos; i++) {
+            Thread capturaImagenes = new CapturaImagenes(colaPrioridad, colaProcesamiento, latch, intervaloCaptura);
+            hilosCaptura.add(capturaImagenes);
+            capturaImagenes.start();
+        }
+
+        List<Thread> hilosReconocimiento = new ArrayList<>();
+        for (int i = 0; i < cantidadHilos; i++) {
+            Thread reconocimientoFacial = new ReconocimientoFacial(colaProcesamiento, cantidadImagenes / cantidadHilos, latch, tiemposDeProcesamiento, tiemposDeEspera);
+            hilosReconocimiento.add(reconocimientoFacial);
+            reconocimientoFacial.start();
+        }
+
         Thread controlAcceso = new ControlAcceso(colaProcesamiento, cantidadImagenes, resultados, latch);
-    
-        System.out.println("Iniciando hilos...");
-        capturaImagenes.start();
-        reconocimientoFacial.start();
         controlAcceso.start();
-    
+
         try {
             latch.await();
             System.out.println("Todos los hilos han terminado.");
@@ -194,42 +201,12 @@ public class SistemaControlAcceso {
             Thread.currentThread().interrupt();
             System.err.println("Error en latch.await()");
         }
-    
+
         // Calcular y mostrar métricas
         calcularYMostrarMetricas(tiemposDeProcesamiento, tiemposDeEspera, resultados);
-    
+
         System.out.println("Sistema finalizado.");
-    
+
         return resultados;
-    }
-    // Probar casos de prueba en Main sin JUnit
-    public static void ejecutarCasosDePrueba() {
-        System.out.println("Iniciando casos de prueba...");
-
-        System.out.println("Escenario de Prueba: Inicio de Clases");
-        iniciarSistemaConDatosDeArchivo("C:\\Users\\ignrd\\OneDrive\\Escritorio\\obligatorio\\src\\main\\java\\com\\example\\Archivos\\inicio_de_clases.csv");
-        System.out.println("Prueba de Inicio de Clases finalizada.");
-        System.out.println("---------------------------------------------");
-
-        System.out.println("Escenario de Prueba: Evento VIP");
-        iniciarSistemaConDatosDeArchivo("C:\\Users\\ignrd\\OneDrive\\Escritorio\\obligatorio\\src\\main\\java\\com\\example\\Archivos\\evento_vip.csv");
-        System.out.println("Prueba de Evento VIP finalizada.");
-        System.out.println("---------------------------------------------");
-
-        System.out.println("Escenario de Prueba: Cambio de Iluminación");
-        iniciarSistemaConDatosDeArchivo("C:\\Users\\ignrd\\OneDrive\\Escritorio\\obligatorio\\src\\main\\java\\com\\example\\Archivos\\cambio_de_iluminacion.csv");
-        System.out.println("Prueba de Cambio de Iluminación finalizada.");
-        System.out.println("---------------------------------------------");
-
-        System.out.println("Escenario de Prueba: Actualización de Base de Datos");
-        iniciarSistemaConDatosDeArchivo("C:\\Users\\ignrd\\OneDrive\\Escritorio\\obligatorio\\src\\main\\java\\com\\example\\Archivos\\actualizacion_base_de_datos.csv");
-        System.out.println("Prueba de Actualización de Base de Datos finalizada.");
-        System.out.println("---------------------------------------------");
-
-        System.out.println("Escenario de Prueba: Carga Máxima");
-        iniciarSistemaConDatosDeArchivo("C:\\Users\\ignrd\\OneDrive\\Escritorio\\obligatorio\\src\\main\\java\\com\\example\\Archivos\\carga_maxima.csv");
-        System.out.println("Prueba de Carga Máxima finalizada.");
-        System.out.println("---------------------------------------------");
-        System.out.println("Casos de prueba finalizados.");
     }
 }

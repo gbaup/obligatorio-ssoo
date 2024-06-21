@@ -4,12 +4,20 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
 
 public class CapturaImagenes extends Thread {
-    private final BlockingQueue<Imagen> colaPrioridad;
-    private final BlockingQueue<Imagen> colaProcesamiento;
-    private final CountDownLatch latch;
-    private final int intervaloCaptura;
+    private  BlockingQueue<Imagen> colaPrioridad;
+    private  BlockingQueue<Imagen> colaProcesamiento;
+    private  CountDownLatch latch;
+    private  int intervaloCaptura;
 
-    public CapturaImagenes(BlockingQueue<Imagen> colaPrioridad, BlockingQueue<Imagen> colaProcesamiento, CountDownLatch latch, int intervaloCaptura) {
+    public CapturaImagenes(BlockingQueue<Imagen> colaPrioridad, BlockingQueue<Imagen> colaProcesamiento, CountDownLatch latch,int intervaloCaptura) {
+        this.colaPrioridad = colaPrioridad;
+        this.colaProcesamiento = colaProcesamiento;
+        this.latch = latch;
+        this.intervaloCaptura = intervaloCaptura;
+        this.setName("CapturaImagenes");
+    }
+
+    public void siCapturaImagenes(BlockingQueue<Imagen> colaPrioridad, BlockingQueue<Imagen> colaProcesamiento, CountDownLatch latch, int intervaloCaptura) {
         this.colaPrioridad = colaPrioridad;
         this.colaProcesamiento = colaProcesamiento;
         this.latch = latch;

@@ -19,8 +19,8 @@ public class SistemaControlAcceso {
     public static void main(String[] args) {
         try {
             System.out.println("Iniciando sistema...");
-            cargarImagenesPermitidas("/Users/gastonbauer/Desktop/facultad/ssoo/obligatorio/src/main/java/com/example/Archivos/base_de_datos.csv");
-            iniciarSistemaConDatosDeArchivo("/Users/gastonbauer/Desktop/facultad/ssoo/obligatorio/src/main/java/com/example/Archivos/imagenes.csv");
+            cargarImagenesPermitidas("C:\\Users\\ignrd\\OneDrive\\Escritorio\\obligatorio-ssoo\\src\\main\\java\\com\\example\\Archivos\\base_de_datos.csv");
+            iniciarSistemaConDatosDeArchivo("C:\\Users\\ignrd\\OneDrive\\Escritorio\\obligatorio-ssoo\\src\\main\\java\\com\\example\\Archivos\\imagenes.csv");
             System.out.println("---------------------------------------------");
 
             //ejecutarCasosDePrueba();
@@ -156,7 +156,7 @@ public class SistemaControlAcceso {
 
         BlockingQueue<Imagen> colaProcesamiento = new PriorityBlockingQueue<>(30, (i1, i2) -> {
             if (i1.isEsVIP() == i2.isEsVIP()) {
-                return Integer.compare(i1.getId(), i2.getId());
+                    return Integer.compare(i1.getId(), i2.getId());
             }
             return i1.isEsVIP() ? -1 : 1;
         });
